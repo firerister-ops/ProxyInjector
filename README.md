@@ -110,35 +110,27 @@
 ```
 C:\ABF\ProxyInjector\
 ├── README.md                            ← эта документация
-├── build.bat                            ← основная сборка (DLL + Injector)
-├── build_injector.bat                   ← устаревший скрипт (не использовать)
-├── build_test.bat                       ← устаревший скрипт (не использовать)
-├── TestProxy.cpp                        ← устаревший тест (не использовать)
+├── PIPELINE.md                          ← pipeline: запуск PoE + инжекция + интеграция с ControlPanel
+├── TESTING.md                           ← процедуры тестирования (test_client, PoE, Chrome, UDP)
+├── HOOKS.md                             ← справочник всех хуков MinHook и внутренних функций
+├── build.bat                            ← основная сборка (DLL + Injector + test_client)
+├── launch_poe.ps1                       ← запуск PoE через прокси (--watch + --launch)
 │
 ├── ProxyPayload\
-│   ├── dllmain_v2.cpp                   ← АКТИВНАЯ версия DLL (976 строк)
-│   ├── dllmain.cpp                      ← устаревшая v1 (2560 строк, не используется)
-│   ├── dllmain_v1_backup.cpp            ← backup v1
-│   ├── ProxyPayload.vcxproj             ← MSVC project (не используется, собираем MinGW)
+│   ├── dllmain.cpp                      ← DLL: SOCKS5 routing (19 хуков MinHook)
 │   └── minhook\
 │       └── MinHook.h                    ← single-header MinHook (из pixeltris/YgoMaster)
 │
 ├── Injector\
-│   └── injector.cpp                     ← NtCreateThreadEx-based инжектор (356 строк)
+│   └── injector.cpp                     ← NtCreateThreadEx-based инжектор
 │
-├── TestClient\
-│   ├── test_client.cpp                  ← простой TCP клиент с задержкой для теста хуков
-│   └── test_client.exe                  ← собранный тест-клиент
-│
-├── bin\                                 ← выходные бинарники
-│   ├── ProxyPayload.dll                 ← собранная DLL
-│   ├── Injector.exe                     ← собранный инжектор
-│   ├── test_client.exe                  ← собранный тест-клиент
-│   └── proxy_config.txt                 ← конфигурация прокси
-│
-└── mingw\
-    └── mingw64\                         ← portable MinGW64 (для сборки)
+└── TestClient\
+    └── test_client.cpp                  ← простой TCP клиент с задержкой для теста хуков
 ```
+
+> Локальные артефакты (не в git): `bin\` — собранные бинарники, `mingw\` —
+> portable MinGW64 тулчейн, `proxy_config.txt` — конфигурация прокси с кредами
+> (документирована в разделе [Конфигурация](#конфигурация)).
 
 ---
 
