@@ -1,0 +1,31 @@
+# Build outputs
+bin/
+*.exe
+*.dll
+*.o
+*.obj
+
+# MinGW toolchain (huge, not source)
+mingw/
+
+# Config with credentials
+proxy_config.txt
+**/proxy_config.txt
+
+# Compiled test client
+TestClient/*.exe
+
+# Logs
+*.log
+
+# IDE / editor
+.vs/
+.vscode/
+*.suo
+*.user
+*.sln.docstates
+
+# Windows
+Thumbs.db
+Desktop.ini
+.DS_Store
