@@ -365,18 +365,24 @@ static int LaunchMode(int argc, char* argv[]) {
     BOOL injectResult = InjectDLL(hProcess, fullDllPath);
 
     if (!injectResult) {
-        fprintf(stderr, "Injection FAILED — resuming anyway\n");
-    } else {
-        fprintf(stderr, "Injection OK — resuming process\n");
+        // FAILED: the target must never run without the proxy hooks active.
+        // Terminate it, wait for full exit, release handles. NEVER ResumeThread,
+        // NEVER print a "resume anyway" message.
+        fprintf(stderr, "Injection FAILED — terminating target PID=%lu (no resume)\n", pi.dwProcessId);
+        TerminateProcess(pi.hProcess, 1);
+        WaitForSingleObject(pi.hProcess, INFINITE);
+        CloseHandle(pi.hThread);
+        CloseHandle(pi.hProcess);
+        return 1;
     }
 
-    // Resume the main thread
+    // SUCCESS: hooks are active before any application code — resume once.
+    fprintf(stderr, "Injection OK — resuming\n");
     ResumeThread(pi.hThread);
 
     CloseHandle(pi.hThread);
     CloseHandle(pi.hProcess);
-
-    return injectResult ? 0 : 1;
+    return 0;
 }
 
 int main(int argc, char* argv[]) {
